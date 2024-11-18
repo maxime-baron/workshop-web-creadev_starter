@@ -21,9 +21,19 @@ class Bubble {
         this.context.closePath()
     }
 
-    update() {
+    update(width, height) {
         this.x += this.vx
         this.y += this.vy
+
+        /** bounce */
+        // if (this.x < 0 || this.x > width) this.vx *= -1
+        // if (this.y < 0 || this.y > height) this.vy *= -1
+
+        /** bounce corrected */
+        this.vx = this.x < this.radius ? Math.abs(this.vx) : this.vx
+        this.vx = this.x > width - this.radius ? -Math.abs(this.vx) : this.vx
+        this.vy = this.y < this.radius ? Math.abs(this.vy) : this.vy
+        this.vy = this.y > height - this.radius ? -Math.abs(this.vy) : this.vy        
     }
 }
 
@@ -32,10 +42,10 @@ export default class SceneBouncingBubbles extends Scene2D {
         super(id)
 
         this.bubbles = []
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 100; i++) {
             const x_ = this.width * Math.random()
             const y_ = this.height * Math.random()
-            const bubble_ = new Bubble(this.context, x_, y_, 20)
+            const bubble_ = new Bubble(this.context, x_, y_, 10)
             this.bubbles.push(bubble_)
         }
 
@@ -45,7 +55,7 @@ export default class SceneBouncingBubbles extends Scene2D {
     draw() {
         /** style */
         this.context.strokeStyle = "white"
-        this.context.fillStyle = "red"
+        this.context.fillStyle = "black"
         this.context.lineWidth = 4
         this.context.lineCap = "round"
 
@@ -60,7 +70,7 @@ export default class SceneBouncingBubbles extends Scene2D {
     update() {
         if (!!this.bubbles) {
             this.bubbles.forEach(b => {
-                b.update()
+                b.update(this.width, this.height)
             })
         }
 
