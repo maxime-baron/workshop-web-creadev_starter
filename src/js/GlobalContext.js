@@ -1,3 +1,5 @@
+import Time from "./Utils/Time"
+
 let instanceGlobalContext = null
 
 export default class GlobalContext {
@@ -8,6 +10,9 @@ export default class GlobalContext {
         this.sceneCollection = []
 
         window.addEventListener('resize', () => { this.resize() })
+
+        this.time = new Time()
+        this.time.on('update', () => { this.update() })
     }
 
     get window() {
@@ -24,5 +29,9 @@ export default class GlobalContext {
 
     resize() {
         this.sceneCollection.forEach( s => { s.resize() } )
+    } 
+
+    update() {
+        this.sceneCollection.forEach( s => { s.update() } )
     }
 }

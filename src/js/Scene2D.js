@@ -16,12 +16,21 @@ export default class Scene2D {
         this.resize()
     }
 
+    get width() { return this.domElement.width }
+    get height() { return this.domElement.height }
+    get position() { return this.domElement.position }
+
+    clear() {
+        this.context.clearRect(0, 0, this.width, this.height)
+    }
+    
     resize() {
-        console.log("resize scene 2d")
         this.domElement.setSize()
         const pixelRatio_ = this.globalContext.window.pixelRatio
         this.canvas.width = this.domElement.width * pixelRatio_
         this.canvas.height = this.domElement.height * pixelRatio_
         this.context.scale(pixelRatio_, pixelRatio_)
     }
+
+    update() {}
 }
