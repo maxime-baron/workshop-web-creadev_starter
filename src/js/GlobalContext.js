@@ -10,6 +10,7 @@ export default class GlobalContext {
         this.sceneCollection = []
 
         window.addEventListener('resize', () => { this.resize() })
+        window.addEventListener('scroll', () => { this.scroll() })
 
         this.time = new Time()
         this.time.on('update', () => { this.update() })
@@ -33,5 +34,9 @@ export default class GlobalContext {
 
     update() {
         this.sceneCollection.forEach( s => { s.update() } )
+    }
+
+    scroll() {
+        this.sceneCollection.forEach( s => { s.scroll() } )
     }
 }

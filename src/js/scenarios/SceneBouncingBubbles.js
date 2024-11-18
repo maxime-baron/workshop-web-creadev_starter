@@ -1,6 +1,6 @@
 import GlobalContext from "../GlobalContext"
 import Scene2D from "../Scene2D"
-import { degToRad, randomRange } from "../Utils/MathUtils"
+import { degToRad, distance2D, randomRange } from "../Utils/MathUtils"
 
 class Bubble {
     constructor(context, x, y, radius) {
@@ -45,10 +45,10 @@ export default class SceneBouncingBubbles extends Scene2D {
         super(id)
 
         this.bubbles = []
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 50; i++) {
             const x_ = this.width * Math.random()
             const y_ = this.height * Math.random()
-            const bubble_ = new Bubble(this.context, x_, y_, 10)
+            const bubble_ = new Bubble(this.context, x_, y_, 5)
             this.bubbles.push(bubble_)
         }
 
@@ -69,13 +69,13 @@ export default class SceneBouncingBubbles extends Scene2D {
                 for (let j = i; j < this.bubbles.length; j++) {
                     const next_ = this.bubbles[j]
 
-                    // threshold = 200
-
-                    this.context.beginPath()
-                    this.context.moveTo(current_.x, current_.y)
-                    this.context.lineTo(next_.x, next_.y)
-                    this.context.stroke()
-                    this.context.closePath()
+                    if (distance2D(current_.x, current_.y, next_.x, next_.y) < 50) {
+                        this.context.beginPath()
+                        this.context.moveTo(current_.x, current_.y)
+                        this.context.lineTo(next_.x, next_.y)
+                        this.context.stroke()
+                        this.context.closePath()
+                    }
                 }
             }
 
@@ -86,6 +86,8 @@ export default class SceneBouncingBubbles extends Scene2D {
     }
 
     update() {
+        // console.log("update", this.domElement.id)
+
         if (!!this.bubbles) {
             this.bubbles.forEach(b => {
                 b.update(this.width, this.height)
@@ -98,6 +100,18 @@ export default class SceneBouncingBubbles extends Scene2D {
 
     resize() {
         super.resize()
+
+        if (!!this.bubbles) {
+            this.bubbles.forEach(b => {
+                b.x = Math.max(0, Math.min(b.x, this.width))
+                b.y = Math.max(0, Math.min(b.y, this.height))
+            })
+        }
+
         this.draw()
+    }
+
+    scroll() {
+        console.log("scroll scene", this.domElement.id)
     }
 }
