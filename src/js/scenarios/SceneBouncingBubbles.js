@@ -138,6 +138,14 @@ export default class SceneBouncingBubbles extends Scene2D {
     }
 
     onDeviceOrientation() {
-        this.debug.domDebug = "coucou"
+        /** debug */
+        let coordinates_ = ""
+        coordinates_ = coordinates_.concat(
+            this.orientation.alpha.toFixed(2), ", ",
+            this.orientation.beta.toFixed(2), ", ",
+            this.orientation.gamma.toFixed(2)
+        )
+        this.debug.domDebug = coordinates_
+
     }
 }
