@@ -44,25 +44,38 @@ export default class SceneBouncingBubbles extends Scene2D {
     constructor(id) {
         super(id)
 
+        /** debug */
+        this.params = {
+            speed: 1, // positif ou negatif
+            threshold: 50,
+            radius: 5,
+            nBubbles: 10
+        }
+        if (!!this.debugFolder) {
+            this.debugFolder.add(this.params, "threshold", 0, 200)
+            this.debugFolder.add(this.params, "radius", 0, 30, 0.1).name("Rayon").onChange(() => {
+                if (!!this.bubbles) {
+                    this.bubbles.forEach(b => { b.radius = this.params.radius })
+                }
+            })
+            this.debugFolder.add(this.params, "nBubbles", 3, 50).onFinishChange(() => {
+                this.generateBubbles()
+            })
+        }
+        
+        this.generateBubbles()
+        this.draw()
+    }
+
+    generateBubbles() {
+        /** generate bubbles */
         this.bubbles = []
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < this.params.nBubbles; i++) {
             const x_ = this.width * Math.random()
             const y_ = this.height * Math.random()
             const bubble_ = new Bubble(this.context, x_, y_, 5)
             this.bubbles.push(bubble_)
         }
-
-        /** debug */
-        this.params = {
-            threshold: 50,
-            radius: 20,
-            nBubbles: 10
-        }
-        if(!!this.debugFolder) {
-            this.debugFolder.add(this.params, "threshold", 0, 200)
-        }
-
-        this.draw()
     }
 
     draw() {

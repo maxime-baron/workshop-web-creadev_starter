@@ -43,4 +43,5 @@ export default class Scene2D {
     scroll() {
         this.domElement.setSize()
     }
+    destroy() {}
 }

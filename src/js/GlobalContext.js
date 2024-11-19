@@ -46,4 +46,12 @@ export default class GlobalContext {
     scroll() {
         this.sceneCollection.forEach(s => { s.scroll() })
     }
+
+    destroy() {
+        this.sceneCollection.forEach(s => { s.destroy() })
+        window.removeEventListener('resize')
+        window.removeEventListener('scroll')
+        this.time.off('update')
+        if(!!this.debug.ui) this.debug.ui.destroy()
+    }
 }
