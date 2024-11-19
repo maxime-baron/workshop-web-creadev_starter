@@ -7,6 +7,13 @@ export default class Scene2D {
         this.globalContext = new GlobalContext()
         this.globalContext.addScene(this)
 
+        /** debug */
+        this.params = {}
+        this.debug = this.globalContext.debug
+        if (!!this.debug.ui) {
+            this.debugFolder = this.debug.ui.addFolder(id)
+        }
+
         /** dom element */
         this.domElement = new DomElement(id)
         this.canvas = this.domElement.element
@@ -23,7 +30,7 @@ export default class Scene2D {
     clear() {
         this.context.clearRect(0, 0, this.width, this.height)
     }
-    
+
     resize() {
         this.domElement.setSize()
         const pixelRatio_ = this.globalContext.window.pixelRatio
@@ -32,6 +39,8 @@ export default class Scene2D {
         this.context.scale(pixelRatio_, pixelRatio_)
     }
 
-    update() {}
-    scroll() {}
+    update() { }
+    scroll() {
+        this.domElement.setSize()
+    }
 }

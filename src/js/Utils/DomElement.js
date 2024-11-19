@@ -16,4 +16,14 @@ export default class DomElement {
             bottom: rect_.bottom
         }
     }
+
+    // -> sharemycode
+    get isVisible() {
+        let isVisible_ = true
+        if (this.position.bottom < 0 || this.position.top > window.innerHeight ||
+            this.position.right < 0 || this.position.left > window.innerWidth) {
+            isVisible_ = false
+        }
+        return isVisible_
+    }
 }
