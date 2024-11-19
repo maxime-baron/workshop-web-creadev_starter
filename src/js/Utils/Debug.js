@@ -11,4 +11,8 @@ export default class Debug {
             this.ui = new GUI()
         }
     }
+
+    set domDebug(content) {
+        document.getElementById("debug").innerHTML = content
+    }
 }

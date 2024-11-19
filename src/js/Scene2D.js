@@ -39,6 +39,8 @@ export default class Scene2D {
         this.context.scale(pixelRatio_, pixelRatio_)
     }
 
+    onDeviceOrientation() {}
+
     update() { }
     scroll() {
         this.domElement.setSize()

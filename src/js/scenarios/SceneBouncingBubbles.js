@@ -62,7 +62,12 @@ export default class SceneBouncingBubbles extends Scene2D {
                 this.generateBubbles()
             })
         }
-        
+
+        /** device orientation */
+        this.globalContext.useDeviceOrientation = true
+        this.orientation = this.globalContext.orientation
+
+        /** init */
         this.generateBubbles()
         this.draw()
     }
@@ -132,8 +137,7 @@ export default class SceneBouncingBubbles extends Scene2D {
         this.draw()
     }
 
-    scroll() {
-        super.scroll()
-        // console.log("scroll scene", this.position)
+    onDeviceOrientation() {
+        this.debug.domDebug = "coucou"
     }
 }
