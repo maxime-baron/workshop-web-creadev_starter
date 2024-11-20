@@ -1,5 +1,5 @@
-import GlobalContext from "../GlobalContext"
-import Scene2D from "../Scene2D"
+import GlobalContext from "../template/GlobalContext"
+import Scene2D from "../template/Scene2D"
 import { clamp, degToRad, distance2D, randomRange } from "../Utils/MathUtils"
 
 class Bubble {

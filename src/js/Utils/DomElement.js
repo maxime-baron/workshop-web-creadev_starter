@@ -26,4 +26,10 @@ export default class DomElement {
         }
         return isVisible_
     }
+
+    get aspectRatio() {
+        let ratio_ = 1
+        if(!!this.width && !!this.height) ratio_ = this.width / this.height
+        return ratio_
+    }
 }

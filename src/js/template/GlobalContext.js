@@ -1,6 +1,6 @@
-import Debug from "./Utils/Debug"
-import DeviceOrientation from "./Utils/DeviceOrientation"
-import Time from "./Utils/Time"
+import Debug from "../Utils/Debug"
+import DeviceOrientation from "../Utils/DeviceOrientation"
+import Time from "../Utils/Time"
 
 let instanceGlobalContext = null
 
