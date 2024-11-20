@@ -1,6 +1,6 @@
 import GlobalContext from "../GlobalContext"
 import Scene2D from "../Scene2D"
-import { degToRad, distance2D, randomRange } from "../Utils/MathUtils"
+import { clamp, degToRad, distance2D, randomRange } from "../Utils/MathUtils"
 
 class Bubble {
     constructor(context, x, y, radius) {
@@ -14,6 +14,10 @@ class Bubble {
         /** speed */
         this.vx = randomRange(-200, 200)
         this.vy = randomRange(-200, 200)
+
+        /** gravity */
+        this.gx = 0
+        this.gy = 0
     }
 
     draw() {
@@ -25,8 +29,14 @@ class Bubble {
     }
 
     update(width, height) {
-        this.x += this.vx * this.time.delta / 1000
-        this.y += this.vy * this.time.delta / 1000
+        /** gravity bounce */
+        this.gx = this.x > this.radius ? this.gx : 0
+        this.gx = this.x < width - this.radius ? this.gx : 0
+        this.gy = this.y > this.radius ? this.gy : 0
+        this.gy = this.y < width - this.radius ? this.gy : 0
+
+        this.x += (this.vx + this.gx) * this.time.delta / 1000
+        this.y += (this.vy + this.gy) * this.time.delta / 1000
 
         /** bounce */
         // if (this.x < 0 || this.x > width) this.vx *= -1
@@ -49,7 +59,8 @@ export default class SceneBouncingBubbles extends Scene2D {
             speed: 1, // positif ou negatif
             threshold: 50,
             radius: 5,
-            nBubbles: 10
+            nBubbles: 10,
+            gStrength: 300
         }
         if (!!this.debugFolder) {
             this.debugFolder.add(this.params, "threshold", 0, 200)
@@ -61,6 +72,7 @@ export default class SceneBouncingBubbles extends Scene2D {
             this.debugFolder.add(this.params, "nBubbles", 3, 50).onFinishChange(() => {
                 this.generateBubbles()
             })
+            this.debugFolder.add(this.params, "gStrength", 0, 400)
         }
 
         /** device orientation */
@@ -138,14 +150,25 @@ export default class SceneBouncingBubbles extends Scene2D {
     }
 
     onDeviceOrientation() {
+        let gx_ = this.orientation.gamma / 90
+        let gy_ = this.orientation.beta / 90
+        gx_ = clamp(gx_, -1, 1)
+        gy_ = clamp(gy_, -1, 1)
+
         /** debug */
         let coordinates_ = ""
         coordinates_ = coordinates_.concat(
-            this.orientation.alpha.toFixed(2), ", ",
-            this.orientation.beta.toFixed(2), ", ",
-            this.orientation.gamma.toFixed(2)
+            gx_.toFixed(2), ", ",
+            gy_.toFixed(2)
         )
         this.debug.domDebug = coordinates_
 
+        /** update bubbles */
+        if (!!this.bubbles) {
+            this.bubbles.forEach(b => {
+                b.gx = gx_ * this.params.gStrength
+                b.gy = gy_ * this.params.gStrength
+            })
+        }
     }
 }
