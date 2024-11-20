@@ -1,5 +1,6 @@
+import SceneGravityCubes from "./js/scenarios/GravityCubes/SceneGravityCubes"
 import SceneBouncingBubbles from "./js/scenarios/SceneBouncingBubbles"
-import SceneGravityCubes from "./js/scenarios/SceneGravityCubes"
+
 import { askMotionAccess } from "./js/Utils/DeviceAccess"
 
 const scene2d = new SceneBouncingBubbles("canvas-scene")
