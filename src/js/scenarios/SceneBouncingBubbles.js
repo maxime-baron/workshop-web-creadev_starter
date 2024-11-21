@@ -33,7 +33,7 @@ class Bubble {
         this.gx = this.x > this.radius ? this.gx : 0
         this.gx = this.x < width - this.radius ? this.gx : 0
         this.gy = this.y > this.radius ? this.gy : 0
-        this.gy = this.y < width - this.radius ? this.gy : 0
+        this.gy = this.y < height - this.radius ? this.gy : 0
 
         this.x += (this.vx + this.gx) * this.time.delta / 1000
         this.y += (this.vy + this.gy) * this.time.delta / 1000
@@ -154,14 +154,6 @@ export default class SceneBouncingBubbles extends Scene2D {
         let gy_ = this.orientation.beta / 90
         gx_ = clamp(gx_, -1, 1)
         gy_ = clamp(gy_, -1, 1)
-
-        /** debug */
-        let coordinates_ = ""
-        coordinates_ = coordinates_.concat(
-            gx_.toFixed(2), ", ",
-            gy_.toFixed(2)
-        )
-        this.debug.domDebug = coordinates_
 
         /** update bubbles */
         if (!!this.bubbles) {

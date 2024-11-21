@@ -17,7 +17,6 @@ export default class DomElement {
         }
     }
 
-    // -> sharemycode
     get isVisible() {
         let isVisible_ = true
         if (this.position.bottom < 0 || this.position.top > window.innerHeight ||

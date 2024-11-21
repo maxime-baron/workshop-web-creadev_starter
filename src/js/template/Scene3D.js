@@ -57,5 +57,18 @@ export default class Scene3D extends THREE.Scene {
     scroll() {
         this.domElement.setSize()
     }
-    destroy() {}
+    
+    destroy() {
+        this.traverse(child => {
+            if(child instanceof THREE.Mesh) {
+                child.geometry.dispose()
+                for(const key in child.material) {
+                    const value_ = child.material[key]
+                    if(value_ && typeof value_.dispose == 'function') {
+                        value_.dispose()
+                    }
+                }
+            }
+        })
+    }
 }

@@ -66,6 +66,7 @@ export default class GlobalContext {
         window.removeEventListener('resize')
         window.removeEventListener('scroll')
         this.time.off('update')
+        this.useDeviceOrientation = false
         if(!!this.debug.ui) this.debug.ui.destroy()
     }
 }

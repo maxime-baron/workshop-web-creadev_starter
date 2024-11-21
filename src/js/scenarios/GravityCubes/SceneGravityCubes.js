@@ -4,12 +4,23 @@ import { Composite, Engine, Runner } from 'matter-js'
 import { randomRange } from '../../Utils/MathUtils'
 import GravityCube from './GravityCubes'
 import Wall from './Wall'
+import { clamp } from 'three/src/math/MathUtils.js'
 
-const THICKNESS = 15
+const THICKNESS = 20
 
 export default class SceneGravityCubes extends Scene3D {
     constructor(id) {
         super(id)
+
+        /** debug */
+        this.params = {
+            gScale: 1
+        }
+        if(!!this.debugFolder) {
+            this.debugFolder.add(this.params, "gScale", 0.5, 10, 0.1).onChange(() => {
+                if(!!this.engine) this.engine.gravity.scale *= this.params.gScale
+            })
+        }
 
         /** orthographic camera */
         this.camera = new THREE.OrthographicCamera(
@@ -39,6 +50,8 @@ export default class SceneGravityCubes extends Scene3D {
 
         /** matter js */
         this.engine = Engine.create({ render: { visible: false } })
+        this.engine.gravity.scale *= this.params.gScale
+        console.log(this.engine.gravity)
         this.bodies = [
             this.wallRight.body,
             this.wallBottom.body,
@@ -48,15 +61,16 @@ export default class SceneGravityCubes extends Scene3D {
         this.runner = Runner.create()
         Runner.run(this.runner, this.engine)
 
+        /** device orientation */
+        this.globalContext.useDeviceOrientation = true
+        this.orientation = this.globalContext.orientation
+
         /** resize */
         this.resize()
     }
 
     update() {
-        // this.cube.rotation.x += this.globalContext.time.delta / 1000 
-
         this.cubes.forEach(c => { c.update() })
-
         super.update() //-> rendu de la scene
     }
 
@@ -78,7 +92,26 @@ export default class SceneGravityCubes extends Scene3D {
             this.wallRight.setSize(THICKNESS, this.height)
 
             this.wallBottom.setPosition(0, -this.height / 2)
-            this.wallBottom.setSize(this.width / 1.5, THICKNESS)
+            this.wallBottom.setSize(this.width - THICKNESS, THICKNESS)
         }
+    }
+
+    onDeviceOrientation() {
+        let gx_ = this.orientation.gamma / 90
+        let gy_ = this.orientation.beta / 90
+        gx_ = clamp(gx_, -1, 1)
+        gy_ = clamp(gy_, -1, 1)
+
+        /** debug */
+        let coordinates_ = ""
+        coordinates_ = coordinates_.concat(
+            gx_.toFixed(2), ", ",
+            gy_.toFixed(2)
+        )
+        this.debug.domDebug = coordinates_
+
+        /** update engine gravity */
+        this.engine.gravity.x = gx_
+        this.engine.gravity.y = gy_
     }
 }
