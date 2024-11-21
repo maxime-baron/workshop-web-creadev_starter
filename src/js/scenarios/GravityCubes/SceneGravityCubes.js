@@ -69,6 +69,19 @@ export default class SceneGravityCubes extends Scene3D {
         this.resize()
     }
 
+    removeCube(cube) {
+        /** dispose from memory */
+        cube.geometry.dispose()
+        cube.material.dispose()
+        cube.removeFromParent()
+
+        /** dispose from matter js */
+        Composite.remove(this.engine.world, cube.body)
+
+        /** dispose from scene */
+        this.cubes = this.cubes.filter(c => { return c !== cube })
+    }
+
     update() {
         this.cubes.forEach(c => { c.update() })
         super.update() //-> rendu de la scene

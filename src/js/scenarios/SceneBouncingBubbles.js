@@ -59,7 +59,7 @@ export default class SceneBouncingBubbles extends Scene2D {
             speed: 1, // positif ou negatif
             threshold: 50,
             radius: 5,
-            nBubbles: 10,
+            nBubbles: 3,
             gStrength: 300
         }
         if (!!this.debugFolder) {
@@ -93,6 +93,12 @@ export default class SceneBouncingBubbles extends Scene2D {
             const bubble_ = new Bubble(this.context, x_, y_, 5)
             this.bubbles.push(bubble_)
         }
+    }
+
+    addBubble(x, y) {
+        const bubble_ = new Bubble(this.context, x, y, this.params.radius )
+        this.bubbles.push(bubble_)
+        return bubble_
     }
 
     draw() {
