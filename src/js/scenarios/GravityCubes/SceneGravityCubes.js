@@ -33,7 +33,7 @@ export default class SceneGravityCubes extends Scene3D {
         this.wallRight = new Wall('blue')
         this.wallBottom = new Wall('red')
         this.add(this.wallRight)
-        this.add(this.wallBottom)
+        // this.add(this.wallBottom)
 
         /** cube */
         this.cubes = []
@@ -54,7 +54,7 @@ export default class SceneGravityCubes extends Scene3D {
         console.log(this.engine.gravity)
         this.bodies = [
             this.wallRight.body,
-            this.wallBottom.body,
+            // this.wallBottom.body,
             ...this.cubes.map(c => c.body)
         ]
         Composite.add(this.engine.world, this.bodies)
