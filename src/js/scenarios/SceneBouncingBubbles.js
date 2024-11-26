@@ -28,15 +28,15 @@ class Bubble {
         this.context.closePath()
     }
 
-    update(width, height) {
+    update(width, height, speedFactor = 0) {
         /** gravity bounce */
         this.gx = this.x > this.radius ? this.gx : 0
         this.gx = this.x < width - this.radius ? this.gx : 0
         // this.gy = this.y > this.radius ? this.gy : 0
         // this.gy = this.y < height - this.radius ? this.gy : 0
 
-        this.x += (this.vx + this.gx) * this.time.delta / 1000
-        this.y += (this.vy + this.gy) * this.time.delta / 1000
+        this.x += ((this.vx * speedFactor) + this.gx) * this.time.delta / 1000
+        this.y += ((this.vy * speedFactor) + this.gy) * this.time.delta / 1000
 
         /** bounce */
         // if (this.x < 0 || this.x > width) this.vx *= -1
@@ -63,6 +63,7 @@ export default class SceneBouncingBubbles extends Scene2D {
             gStrength: 300
         }
         if (!!this.debugFolder) {
+            this.debugFolder.add(this.params, "speed", -1, 1)
             this.debugFolder.add(this.params, "threshold", 0, 200)
             this.debugFolder.add(this.params, "radius", 0, 30, 0.1).name("Rayon").onChange(() => {
                 if (!!this.bubbles) {
@@ -96,9 +97,14 @@ export default class SceneBouncingBubbles extends Scene2D {
     }
 
     addBubble(x, y) {
-        const bubble_ = new Bubble(this.context, x, y, this.params.radius )
+        const bubble_ = new Bubble(this.context, x, y, this.params.radius)
         this.bubbles.push(bubble_)
         return bubble_
+    }
+
+    removeBubble(bubble) {
+        /** dispose from scene */
+        this.bubbles = this.bubbles.filter(b => { return b !== bubble })
     }
 
     draw() {
@@ -134,7 +140,7 @@ export default class SceneBouncingBubbles extends Scene2D {
     update() {
         if (!!this.bubbles) {
             this.bubbles.forEach(b => {
-                b.update(this.width, this.height)
+                b.update(this.width, this.height, this.params.speed)
             })
         }
 
