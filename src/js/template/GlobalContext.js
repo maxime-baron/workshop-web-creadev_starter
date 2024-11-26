@@ -13,7 +13,7 @@ export default class GlobalContext {
 
         window.addEventListener('resize', () => { this.resize() })
         window.addEventListener('scroll', () => { this.scroll() })
-        
+
         this.time = new Time()
         this.time.on('update', () => { this.update() })
 
@@ -22,11 +22,12 @@ export default class GlobalContext {
     }
 
     set useDeviceOrientation(isOrientation) {
-        if(isOrientation && !!!this.orientation) {
+        if (isOrientation && !!!this.orientation) {
+            console.debug('DeviceOrientation')
             this.orientation = new DeviceOrientation()
             this.orientation.on('reading', () => { this.onDeviceOrientation() })
-        } 
-        if(!isOrientation && !!this.orientation) { this.orientation.off('reading') }
+        }
+        if (!isOrientation && !!this.orientation) { this.orientation.off('reading') }
     }
 
     onDeviceOrientation() {
@@ -67,6 +68,6 @@ export default class GlobalContext {
         window.removeEventListener('scroll')
         this.time.off('update')
         this.useDeviceOrientation = false
-        if(!!this.debug.ui) this.debug.ui.destroy()
+        if (!!this.debug.ui) this.debug.ui.destroy()
     }
 }
